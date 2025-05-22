@@ -35,12 +35,13 @@ BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 def populate(population_size):
     population = []
     for i in range(population_size):
-        R = random.randint(0, 255)
-        G = random.randint(0, 255)
-        if (R < 20 and G < 20):
-            B = 255
-        else:
+        while True:
+            R = random.randint(0, 255)
+            G = random.randint(0, 255)
             B = random.randint(0, 255)
+            brightness = 0.299 * R + 0.587 * G + 0.114 * B
+            if brightness < 180:  # Evitar colores demasiado claros
+                break
         color = (R, G, B)
         population.append(Dinosaur(i, color, True))
     return population

@@ -120,6 +120,12 @@ class Dinosaur(NeuralNetwork):
                 self.dino_run = True
                 self.dino_jump = False
 
+        # Avoid cloud-walking
+        if not self.dino_jump and self.dino_rect.y < self.Y_POS:
+            self.dino_rect.y += 8
+            if self.dino_rect.y >= self.Y_POS:
+                self.dino_rect.y = self.Y_POS
+
     def duck(self):
         # Change the image every 5 frames to walk
         self.image = self.duck_img[self.step_index // 5]
@@ -157,9 +163,12 @@ class Dinosaur(NeuralNetwork):
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 0.8
-        if self.jump_vel < - self.JUMP_VEL:
-            self.dino_jump = False
-            self.jump_vel = self.JUMP_VEL
+
+            # Prevent going through the ground
+            if self.dino_rect.y >= self.Y_POS:
+                self.dino_rect.y = self.Y_POS
+                self.dino_jump = False
+                self.jump_vel = self.JUMP_VEL
 
     # Draw the element on screen
     def draw(self, SCREEN):
